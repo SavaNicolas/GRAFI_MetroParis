@@ -9,10 +9,35 @@ class Controller:
         self._model = model
 
     def handleCreaGrafo(self,e):
-        pass
+        self._model.buildGraphPesato()
+        self._view.lst_result.controls.clear()
+        self._view.lst_result.controls.append(ft.Text("grafo correttamente creato"))
+        #adesso posso abilutare il bottone per trovare raggiungibili, lo faccio perchè così son sicuro che il grafo è stato creato
+        self._view.btnCalcola.disabled = False
+
+
+        self._view.lst_result.controls.append(ft.Text(f"grafo contiene: {self._model.getNumNodi()} nodi"))
+        self._view.lst_result.controls.append(ft.Text(f"grafo contiene: {self._model.getNumArchi()} archi"))
+
+        self._view.update_page()
+
+
+
 
     def handleCercaRaggiungibili(self,e):
-        pass
+        if self._fermataPartenza is None:
+            self._view.lst_result.controls.clear()
+            self._view.lst_result.controls.append(ft.Text("Partenza di Fermata non selezionata"))
+            self._view.update_page()
+            return
+        #se tutto va bene
+        nodes= self._model.getBFSNodesFromEdges(self._fermataPartenza)
+        self._view.lst_result.controls.clear()
+        #stampo risultato
+        self._view.lst_result.controls.append(ft.Text(f" raggiungibili da {self._fermataPartenza}"))
+        for node in nodes:
+            self._view.lst_result.controls.append(ft.Text(node))
+        self._view.update_page()
 
     def loadFermate(self, dd: ft.Dropdown()):
         fermate = self._model.fermate

@@ -1,11 +1,13 @@
 from dataclasses import dataclass
+from decimal import Decimal
+
 
 @dataclass
 class Fermata:
     id_fermata: int
     nome: str
-    coordX: int
-    coordY: int
+    coordX: Decimal
+    coordY: Decimal
 
 
     def __hash__(self):
