@@ -42,6 +42,8 @@ class View(ft.UserControl):
         self._ddStazArrivo = ft.Dropdown(label="Stazione di Arrivo")
         self._btnCalcola = ft.ElevatedButton(text="Calcola Raggiungibili", on_click=self._controller.handleCercaRaggiungibili,disabled=True)
 
+        self._btnCercaPercorso = ft.ElevatedButton(text="Cerca Percorso",
+                                             on_click=self._controller.handleCercaPercorso, disabled=True)
 
         #Load elements in DD
         self._controller.loadFermate(self._ddStazPartenza)
@@ -52,6 +54,7 @@ class View(ft.UserControl):
                        self._ddStazPartenza,
                        self._ddStazArrivo,
                        self._btnCalcola,
+                       self._btnCercaPercorso,
                        ], alignment=ft.MainAxisAlignment.CENTER, spacing=30)
 
         # Row with listview

@@ -14,6 +14,7 @@ class Controller:
         self._view.lst_result.controls.append(ft.Text("grafo correttamente creato"))
         #adesso posso abilutare il bottone per trovare raggiungibili, lo faccio perchè così son sicuro che il grafo è stato creato
         self._view.btnCalcola.disabled = False
+        self._view.btnCercaPercorso.disabled = False
 
 
         self._view.lst_result.controls.append(ft.Text(f"grafo contiene: {self._model.getNumNodi()} nodi"))
@@ -66,3 +67,24 @@ class Controller:
             self._fermataArrivo = None
         else:
             self._fermataArrivo = e.control.data
+
+#per stampare il percorso minimo
+    def handleCercaPercorso(self,e):
+        if self._fermataArrivo.value is None or self._fermataPartenza.value is None:
+            self._view.lst_result.controls.clear()
+            self._view.lst_result.controls.append(ft.Text("Attenzione,selezionare una fermata di partenza e di arrivo"))
+            self._view.update_page()
+            return
+        totTime,path= self._model.getShortestPath(self._fermataPartenza,self._fermataArrivo)
+
+        if path== []:
+            self._view.lst_result.controls.clear()
+            self._view.lst_result.controls.append(ft.Text("non ho trovato cammino minimo"))
+            self._view.update_page()
+            return
+        self._view.lst_result.controls.clear()
+        self._view.lst_result.controls.append(ft.Text(f"ho trovato un cammino tra{self._fermataPartenza} e {self._fermataArrivo} e impiega {totTime} minuti"))
+        for n in path:
+            self._view.lst_result.controls.append(ft.Text(n))
+
+        self._view.update_page()

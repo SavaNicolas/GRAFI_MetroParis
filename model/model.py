@@ -1,5 +1,6 @@
 from database.DAO import DAO
 import networkx as nx
+import geopy.distance
 
 class Model:
     def __init__(self):
@@ -41,7 +42,19 @@ class Model:
                 res.append(e)
         return res
 
+    def addEdgesPesatiTempi(self):
+        "aggiunge archi con peso uguale al tempo di percorrenza dell'arco"
+        self.grafo.clear_edges()
+        allEdges= DAO.allEdgesVel()
+        for e in allEdges:#avevamo una tupla
+            u = self.idMapFermate[e[0]] #partenza
+            v= self.idMapFermate[e[1]] #arrivo
+            peso= self.getTraversalTime(u,v, e[2]) #per trovare il tempo data la velocita
+            self._grafo.add_edge(u, v, weight=peso)
 
+    def getShortestPath(self,u,v):
+        "usiamo dikistra"
+        return nx.single_source_dijkstra(self._grafo, u,v)
 
     def buildGraph(self):
         #aggiungiamo i nodi(li ho nelle fermate)
@@ -114,3 +127,9 @@ class Model:
     @property
     def fermate(self):
         return self._fermate
+
+    def getTraversalTime(self,u,v, velocità):
+        distanza = geopy.distance((u.coordX,u.coordY),
+                                  v.coordX,v.coordY).km #per trovare distanza, devi passare 2 tuple, latitudine e longitudine pt.1 e pt.2
+        time= distanza/velocità * 60 #in minuti
+        return time
