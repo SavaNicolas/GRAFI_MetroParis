@@ -69,3 +69,23 @@ class DAO():
         cursor.close()
         conn.close()
         return result
+
+    @staticmethod
+    def allEdgesPesati(idMap):
+        conn = DBConnect.get_connection()
+
+        result = []
+
+        cursor = conn.cursor(dictionary=True)
+        query = """
+        SELECT id_stazP as nodo1, id_stazA as nodo2, count(*) as totale
+        FROM connessione
+        group by id_stazP,id_stazA
+        """
+        cursor.execute(query)
+
+        for row in cursor:
+            result.append(ArcoPesato(idMap[row["nodo1"]],idMap[row["nodo2"]], row["totale"]))
+        cursor.close()
+        conn.close()
+        return result
