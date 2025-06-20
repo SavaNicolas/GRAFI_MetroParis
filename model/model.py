@@ -77,7 +77,10 @@ class Model:
         for edge in allEdges:
             u = self.idMapFermate[edge.id_stazP]
             v= self.idMapFermate[edge.id_stazA]
-            self._grafo.add_edge(u, v)
+            if self._grafo.has_edge(u,v):  # controllo se esiste già l'arco
+                continue
+            else:
+                self._grafo.add_edge(u, v)
 
     #visito grafo
     def getBFSNodesFromTree(self,source):
