@@ -32,6 +32,18 @@ class Model:
             else:
                 self._grafo.add_edge(u, v, weight=1)
 
+    def addEdges_Pesati_lineeDiverse(self):
+        """il grafo è pesato e il suo peso rappresenta il numero di linee diverse che connettono le due fermate"""
+        allEdges = DAO.allEdgesPesati(self.idMapNodes) #lista di archi che hanno anche il peso come attributo
+        for edge in allEdges:
+            nodo_1 = edge.nodo1
+            nodo_2 = edge.nodo2
+            peso= edge.peso
+            if self._grafo.has_edge(nodo_1, nodo_2):  # controllo se esiste già l'arco
+                continue
+            else:
+                self._grafo.add_edge(nodo_1, nodo_2, weight=peso)
+
     def getArchiPesoMaggiore(self):
         #filtra archi con pesi maggiori di 1
         edges= self._grafo.edges(data=True)
